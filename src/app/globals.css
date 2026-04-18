@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-ink: #0a0a0a;
+  --color-bone: #f7f5f0;
+  --color-paper: #ffffff;
+  --color-muted: #6b6b6b;
+  --color-line: #e5e2da;
+  --color-accent: #1f3a2e;
+  --color-accent-soft: #c8d4ce;
+  --color-warn: #c1440e;
+}
+
+html,
+body {
+  background: var(--color-bone);
+  color: var(--color-ink);
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.tabnum {
+  font-variant-numeric: tabular-nums;
+}
