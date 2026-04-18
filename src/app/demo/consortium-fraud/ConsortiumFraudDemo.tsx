@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { DemoChrome, type TraceStep } from "@/components/DemoChrome";
+import { trackEvent } from "@/lib/analytics";
 
 type NodeStatus = "idle" | "computing" | "match" | "no-match";
 
@@ -90,6 +91,7 @@ export function ConsortiumFraudDemo() {
 
   async function runQuery() {
     if (running) return;
+    trackEvent("demo_action", { slug: "consortium-fraud", action: "run_query", query: query.id });
     setRunning(true);
     setResult(null);
     setRunId((x) => x + 1);
@@ -148,6 +150,7 @@ export function ConsortiumFraudDemo() {
 
   return (
     <DemoChrome
+      analyticsSlug="consortium-fraud"
       title="Consortium Fraud Console"
       industry="Financial Services · Financial Crime"
       summary="Four banks, one query, zero raw data shared. Ask whether an account fingerprint appears anywhere in the consortium — get an aggregate answer with a cryptographic audit trail, while each bank's row-level data never leaves its premises."

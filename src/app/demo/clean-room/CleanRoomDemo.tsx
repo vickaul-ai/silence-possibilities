@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { DemoChrome, type TraceStep } from "@/components/DemoChrome";
+import { trackEvent } from "@/lib/analytics";
 
 type Phase = "idle" | "blinding" | "exchange" | "intersect" | "aggregate" | "done";
 
@@ -122,6 +123,11 @@ export function CleanRoomDemo() {
 
   async function runQuery() {
     if (running) return;
+    trackEvent("demo_action", {
+      slug: "clean-room",
+      action: "run_query",
+      query: query.id,
+    });
     setRunning(true);
     setResult(null);
     setRunId((x) => x + 1);
@@ -183,6 +189,7 @@ export function CleanRoomDemo() {
 
   return (
     <DemoChrome
+      analyticsSlug="clean-room"
       title="Data Clean Room"
       industry="Data Collaboration · Retail × Banking"
       summary="Two companies measure the overlap and joint behavior of their customer bases without either handing over its customer list. The intersection is computed where the data lives — the lists never move."

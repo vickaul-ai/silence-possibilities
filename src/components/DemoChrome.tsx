@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { trackEvent } from "@/lib/analytics";
 
 export interface TraceStep {
   layer: string;
@@ -19,6 +20,7 @@ interface Props {
   children: React.ReactNode;
   pilotCtaHref?: string;
   pilotCtaLabel?: string;
+  analyticsSlug?: string;
 }
 
 export function DemoChrome({
@@ -31,8 +33,27 @@ export function DemoChrome({
   children,
   pilotCtaHref = "mailto:hello@silencelaboratories.com",
   pilotCtaLabel = "Pilot this with us",
+  analyticsSlug,
 }: Props) {
   const [tab, setTab] = useState<"demo" | "architecture" | "trace">("demo");
+
+  useEffect(() => {
+    if (analyticsSlug) trackEvent("demo_load", { slug: analyticsSlug });
+  }, [analyticsSlug]);
+
+  const onTabSwitch = (t: "demo" | "architecture" | "trace") => {
+    setTab(t);
+    if (analyticsSlug)
+      trackEvent("demo_tab_switch", { slug: analyticsSlug, tab: t });
+  };
+
+  const onPilotClick = () => {
+    if (analyticsSlug)
+      trackEvent("pilot_cta_click", {
+        slug: analyticsSlug,
+        source: "demo",
+      });
+  };
 
   return (
     <div>
@@ -58,6 +79,7 @@ export function DemoChrome({
             </h1>
             <a
               href={pilotCtaHref}
+              onClick={onPilotClick}
               className="inline-flex items-center self-start rounded-full bg-[var(--color-ink)] px-4 py-2 text-xs font-medium text-[var(--color-bone)] hover:opacity-90"
             >
               {pilotCtaLabel} →
@@ -72,7 +94,7 @@ export function DemoChrome({
           {(["demo", "architecture", "trace"] as const).map((t) => (
             <button
               key={t}
-              onClick={() => setTab(t)}
+              onClick={() => onTabSwitch(t)}
               className={`border-b-2 px-4 py-3 text-xs uppercase tracking-wider transition ${
                 tab === t
                   ? "border-[var(--color-ink)] text-[var(--color-ink)]"

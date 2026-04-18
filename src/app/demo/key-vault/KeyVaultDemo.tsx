@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { DemoChrome, type TraceStep } from "@/components/DemoChrome";
+import { trackEvent } from "@/lib/analytics";
 
 type Phase = "idle" | "policy" | "collect" | "aggregate" | "done" | "blocked";
 type CustodianStatus = "idle" | "waiting" | "signed" | "held";
@@ -205,6 +206,12 @@ export function KeyVaultDemo() {
 
   async function runAction() {
     if (running) return;
+    trackEvent("demo_action", {
+      slug: "key-vault",
+      action: "submit_action",
+      key: selectedKey.id,
+      outcome: selectedAction.outcome,
+    });
     setRunning(true);
     setResult(null);
     setCustodianStates(Object.fromEntries(selectedKey.custodians.map((c) => [c, "idle"])));
@@ -309,6 +316,7 @@ export function KeyVaultDemo() {
 
   return (
     <DemoChrome
+      analyticsSlug="key-vault"
       title="MPC Key Vault Console"
       industry="Digital Assets · Institutional Custody"
       summary="A signing-key vault where the private key never exists in one place — not on an HSM, not in an enclave, not in any single operator's control. Policies run before the ceremony; rejects cost nothing. This is what replaces single-operator custody."
