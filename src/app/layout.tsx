@@ -3,9 +3,9 @@ import { Analytics } from "@/components/Analytics";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Delivr Private Memo",
+  title: "Silence Possibilities — What You Could Build With MPC",
   description:
-    "Private terms analysis memo for Delivr.",
+    "Interactive previews of privacy-preserving computation applications across financial services, AI, and beyond. Powered by Silence Laboratories.",
 };
 
 export default function RootLayout({
